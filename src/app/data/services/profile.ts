@@ -15,4 +15,9 @@ export class ProfileService {
     getTestAccounts() {
         return this.http.get<Profile[]>(`${this.baseApiUrl}account/test_accounts`);
     }
+
+    // метод сервиса по запросу данных о себе
+    getMe() {
+        return this.http.get<Profile>(`${this.baseApiUrl}account/me`);
+    }
 }

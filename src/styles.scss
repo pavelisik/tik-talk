@@ -1,9 +1,11 @@
 @import url('./fonts.scss');
+@import url('./margins.scss');
 
 :root {
     --dark-color: #000000;
     --light-color: #ffffff;
     --primary-color: #ae7aff;
+    --grey-color: #5f646d;
 }
 
 *,
@@ -14,10 +16,22 @@
     padding: 0;
 }
 
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
 body {
     font-family: 'JetBrains Mono', sans-serif;
     background: var(--dark-color);
     color: var(--light-color);
+    background-image: url(/assets/images/background-big.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
 }
 
 .skill-tag {
@@ -32,6 +46,7 @@ body {
 }
 
 .btn {
+    width: 100%;
     border: none;
     background: var(--primary-color);
     color: var(--dark-color);
@@ -39,6 +54,30 @@ body {
     font-weight: 700;
     font-size: 14px;
     line-height: 24px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid var(--dark-color);
+}
+
+.btn-shadow {
+    position: relative;
+    &:before {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        bottom: -4px;
+        right: -4px;
+        background: var(--grey-color);
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+    }
+}
+
+.btn-shadow .h1 {
+    font-size: 48px;
+    line-height: 56px;
+    font-weight: 800;
 }
 
 .h6 {
@@ -51,4 +90,26 @@ body {
     font-size: 14px;
     line-height: 20px;
     font-weight: 400;
+}
+
+.tt-control-label {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 16px;
+    display: block;
+}
+
+.tt-input {
+    width: 100%;
+    margin-top: 8px;
+    display: block;
+    border: 1px solid var(--light-color);
+    border-radius: 4px;
+    padding: 12px 20px;
+    background: var(--dark-color);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    font-family: 'JetBrains Mono', sans-serif;
+    color: var(--light-color);
 }
