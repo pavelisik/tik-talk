@@ -13,15 +13,20 @@
 
     <label class="tt-control-label mb32">
         Пароль
-        <input
-            formControlName="password"
-            class="tt-input"
-            type="text"
-            placeholder="Введите пароль"
-        />
+        <span class="password-input">
+            <input
+                formControlName="password"
+                class="tt-input"
+                type="text"
+                placeholder="Введите пароль"
+            />
+            <button class="password-eye-btn">
+                <img src="/assets/svg/password-icon.svg" />
+            </button>
+        </span>
     </label>
 
     <button class="btn btn-shadow" type="submit">Войти</button>
 </form>
 
-<img src="/assets/svg/logo-big.svg" alt="logo" />
+<img src="/assets/svg/logo-big.svg" class="big-logo" alt="logo" />

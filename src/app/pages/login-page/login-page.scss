@@ -5,3 +5,16 @@
     align-items: center;
     margin: 0 5%;
 }
+
+.login-form {
+    width: 440px;
+}
+
+.login-form,
+.big-logo {
+    place-self: center;
+}
+
+.password-input {
+    position: relative;
+}
