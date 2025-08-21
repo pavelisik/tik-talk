@@ -1,54 +1,69 @@
-import { HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+// используемые в интерцепторе типы
+// HttpInterceptorFn — функциональный HTTP интерцептор
+// HttpRequest - исходный HTTP-запрос
+// HttpHandlerFn - функция, которая передаёт запрос дальше по цепочке
+import { HttpInterceptorFn, HttpRequest, HttpHandlerFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Auth } from './auth';
+import { AuthService } from './auth';
+// RxJS операторы для работы с потоками
 import { catchError, switchMap, throwError } from 'rxjs';
 
+// флаг, показывающий, что в данный момент выполняется обновление токена
 let isRefreshing = false;
 
-export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
-    const authService = inject(Auth);
-    const token = authService.token;
-
-    if (!token) return next(req);
-
-    if (isRefreshing) {
-        return refreshAndProceed(authService, req, next);
-    }
-
-    req = req.clone({
-        setHeaders: {
-            Authorization: `Bearer ${token}`,
-        },
+// функция для добавления токена к запросу
+const addToken = (req: HttpRequest<any>, token: string) => {
+    return req.clone({
+        setHeaders: { Authorization: `Bearer ${token}` },
     });
-
-    return next(addToken(req, token)).pipe(
-        catchError((error) => {
-            if (error.status === 403) {
-                return refreshAndProceed(authService, req, next);
-            }
-
-            return throwError(error);
-        })
-    );
 };
 
-const refreshAndProceed = (authService: Auth, req: HttpRequest<any>, next: HttpHandlerFn) => {
+// функция для обновления токена и повторной отправки запроса
+const refreshAndProceed = (
+    authService: AuthService,
+    req: HttpRequest<any>,
+    next: HttpHandlerFn
+) => {
+    // если в данный момент НЕ ИДЕТ обновление токена - запускаем процесс обновления
     if (!isRefreshing) {
         isRefreshing = true;
+        // получаем новый токен по переданному refreshToken
         return authService.refreshAuthToken().pipe(
+            // меняем поток на поток с новым запросом
             switchMap((res) => {
                 isRefreshing = false;
+                // добавляем новый токен к запросу
                 return next(addToken(req, res.access_token));
             })
         );
     }
+    // если ИДЕТ обновление токена - используем текущий (старый) токен
     return next(addToken(req, authService.token!));
 };
 
-const addToken = (req: HttpRequest<any>, token: string) => {
-    return (req = req.clone({
-        setHeaders: {
-            Authorization: `Bearer ${token}`,
-        },
-    }));
+// основной интерцептор (перехватчик) для добавления токена авторизации в заголовки всех запросов
+export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
+    // внедрение зависимости (экземпляр сервиса AuthService)
+    const authService = inject(AuthService);
+    // берем текущий token из сервиса
+    const token = authService.token;
+
+    // если токена нет - пропускаем запрос без изменений
+    if (!token) return next(req);
+
+    // если ИДЕТ процесс обновления - вызываем функцию обновления не дожидаясь ошибки
+    if (isRefreshing) {
+        return refreshAndProceed(authService, req, next);
+    }
+
+    // если НЕ ИДЕТ процесс обновления - добавляем токен к запросу
+    return next(addToken(req, token)).pipe(
+        catchError((error) => {
+            // если токен просроченый (403) - вызываем функцию обновления
+            if (error.status === 403) {
+                return refreshAndProceed(authService, req, next);
+            }
+            return throwError(() => error);
+        })
+    );
 };

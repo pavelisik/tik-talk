@@ -1,13 +1,17 @@
 import { inject } from '@angular/core';
-import { Auth } from './auth';
+import { AuthService } from './auth';
 import { Router } from '@angular/router';
 
 export const canActivateAuth = () => {
-    const isLoggedIn = inject(Auth).isAuth;
+    // внедрение зависимостей (экземпляры сервисов AuthService и Router)
+    const authService = inject(AuthService);
+    const router = inject(Router);
 
-    if (isLoggedIn) {
+    // если авторизован (вызов геттера isAuth проверяющего наличие токенов) - guard пропускает маршрут
+    if (authService.isAuth) {
         return true;
     }
 
-    return inject(Router).createUrlTree(['/login']);
+    // если не авторизован - возвращаем объект UrlTree (перенаправит на login)
+    return router.createUrlTree(['/login']);
 };

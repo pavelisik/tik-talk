@@ -1,4 +1,4 @@
-import { Auth } from './../../auth/auth';
+import { AuthService } from './../../auth/auth';
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,12 +10,17 @@ import { Router } from '@angular/router';
     styleUrl: './login-page.scss',
 })
 export class LoginPage {
-    auth = inject(Auth);
+    // внедрение зависимости (экземпляр сервиса AuthService)
+    authService = inject(AuthService);
+    // внедрение зависимости (экземпляр сервиса маршрутизации для навигации)
     router = inject(Router);
 
+    // создается экземпляр FormGroup для формы, каждое поле это FormControl
     form = new FormGroup({
         username: new FormControl<string>('', {
+            // запрещает null (значение всегда будет строкой)
             nonNullable: true,
+            // массив валидаторов
             validators: [Validators.required],
         }),
         password: new FormControl<string>('', {
@@ -24,10 +29,14 @@ export class LoginPage {
         }),
     });
 
+    // метод для обработки сабмита
     onSubmit() {
+        // проверка что все валидаторы пройдены
         if (this.form.valid) {
             console.log(this.form.value);
-            this.auth.login(this.form.getRawValue()).subscribe((res) => {
+            // вызывает метод login из сервиса authService, передавая объект с логином и паролем
+            this.authService.login(this.form.getRawValue()).subscribe((res) => {
+                // перенаправляет на главную страницу
                 this.router.navigate(['']);
                 console.log(res);
             });

@@ -9,5 +9,6 @@ import { ImgUrlPipe } from '../../helpers/pipes/img-url-pipe';
     styleUrl: './profile-card.scss',
 })
 export class ProfileCard {
+    // входные свойства компонента
     @Input() profile!: Profile;
 }

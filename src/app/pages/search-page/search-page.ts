@@ -10,12 +10,13 @@ import { ProfileService } from '../../data/services/profile';
     styleUrl: './search-page.scss',
 })
 export class SearchPage {
-    // в переменную profileService сохраняем экземпляр Profile
+    // внедрение зависимости (экземпляр сервиса ProfileService)
     profileService = inject(ProfileService);
-    // массив полученных профилей
+    // создаем пустой массив для профилей
     profiles: Profile[] = [];
 
     constructor() {
+        // вызывается метод сервиса getTestAccounts для тестового запроса по выбору профилей
         this.profileService.getTestAccounts().subscribe((val) => {
             this.profiles = val;
         });

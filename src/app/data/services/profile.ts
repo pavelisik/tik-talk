@@ -6,7 +6,7 @@ import { Profile } from '../interfaces/profile.interface';
     providedIn: 'root',
 })
 export class ProfileService {
-    // инжектируем сущность HttpClient (запрашиваем ее у Angular)
+    // внедрение зависимости (экземпляр сервиса HttpClient)
     http = inject(HttpClient);
 
     baseApiUrl = 'https://icherniakov.ru/yt-course/';
@@ -16,7 +16,7 @@ export class ProfileService {
         return this.http.get<Profile[]>(`${this.baseApiUrl}account/test_accounts`);
     }
 
-    // метод сервиса по запросу данных о себе
+    // метод сервиса по запросу данных о текущем пользователе
     getMe() {
         return this.http.get<Profile>(`${this.baseApiUrl}account/me`);
     }

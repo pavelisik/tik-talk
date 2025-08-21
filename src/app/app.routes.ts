@@ -9,10 +9,12 @@ export const routes: Routes = [
     {
         path: '',
         component: Layout,
+        // дочерние маршруты внутри Layout
         children: [
             { path: '', component: SearchPage },
             { path: 'profile', component: ProfilePage },
         ],
+        // guard-функция для контроля доступа к маршрутам
         canActivate: [canActivateAuth],
     },
     { path: 'login', component: LoginPage },
