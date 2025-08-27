@@ -18,3 +18,18 @@
 .password-input {
     position: relative;
 }
+
+.password-eye-btn {
+    position: absolute;
+    top: 55%;
+    right: 12px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #ffffffbf;
+    cursor: pointer;
+}
+
+.password-eye-btn.active {
+    color: var(--primary-color);
+}

@@ -1,5 +1,5 @@
 import { AuthService } from './../../auth/auth';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -14,6 +14,9 @@ export class LoginPage {
     authService = inject(AuthService);
     // внедрение зависимости (экземпляр сервиса маршрутизации для навигации)
     router = inject(Router);
+
+    // создание сигнала, описывающего видимость пароля
+    isPasswordVisible = signal<boolean>(false);
 
     // создается экземпляр FormGroup для формы, каждое поле это FormControl
     form = new FormGroup({
