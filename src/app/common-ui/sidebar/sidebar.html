@@ -2,10 +2,10 @@
 <nav class="mb20">
     <ul class="main-menu-list">
         <li *ngFor="let menuItem of menuItems">
-            <button class="menu-item">
+            <a [routerLink]="[menuItem.link]" class="menu-item">
                 <svg [icon]="menuItem.icon"></svg>
-                <span>Моя страница</span>
-            </button>
+                <span>{{ menuItem.label }}</span>
+            </a>
         </li>
     </ul>
 </nav>
@@ -16,7 +16,25 @@
 <app-subscriber-card [profile]="profile"></app-subscriber-card>
 }
 
-<div class="mt20 to-subscribers">
-    <a [routerLink]="['/subscribers']" class="to-subscribers-link medium-text">Все подписчики</a>
+<!-- <div class="to-subscribers mt20"> -->
+<a [routerLink]="['/subscribers']" class="to-subscribers medium-text mt20">
+    Все подписчики
     <svg icon="arrow" class="to-subscribers-icon"></svg>
-</div>
+</a>
+<!-- </div> -->
+
+<footer class="sidebar__footer">
+    @if (me(); as me) { @if (me.avatarUrl) {
+    <img [src]="me.avatarUrl | imgUrl" alt="" />
+    } @else {
+    <img src="/assets/images/avatar-placeholder.png" alt="" />
+    }
+
+    <div class="medium-text username-text">{{ me.username }}</div>
+
+    <a [routerLink]="['settings']" class="settings-btn">
+        <svg icon="settings"></svg>
+    </a>
+
+    }
+</footer>

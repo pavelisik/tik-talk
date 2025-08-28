@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import type { Profile } from '../interfaces/profile.interface';
 import type { Pageble } from '../interfaces/pageble.interface';
 import { map, tap } from 'rxjs';
@@ -12,6 +12,9 @@ export class ProfileService {
     http = inject(HttpClient);
     baseApiUrl = 'https://icherniakov.ru/yt-course/';
 
+    // создаем сигнал для данных по своему аккаунту
+    me = signal<Profile | null>(null);
+
     // метод сервиса по запросу данных тестового аккаунта
     getTestAccounts() {
         return this.http.get<Profile[]>(`${this.baseApiUrl}account/test_accounts`);
@@ -19,10 +22,9 @@ export class ProfileService {
 
     // метод сервиса по запросу данных о текущем пользователе
     getMe() {
-        return this.http.get<Profile>(`${this.baseApiUrl}account/me`);
-        // .pipe(
-        //     tap(res => this.me.set(res))
-        // )
+        return this.http
+            .get<Profile>(`${this.baseApiUrl}account/me`)
+            .pipe(tap((res) => this.me.set(res)));
     }
 
     getAccount(id: string) {
