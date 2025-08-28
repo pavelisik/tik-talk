@@ -84,9 +84,15 @@
     }
 
     .settings-btn {
+        color: var(--primary-color);
+
         svg {
             width: 14px;
             height: 14px;
+        }
+
+        :hover {
+            color: var(--light-color);
         }
     }
 }
