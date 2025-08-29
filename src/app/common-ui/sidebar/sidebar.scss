@@ -28,6 +28,7 @@
     text-align: left;
     border-radius: 2px;
 
+    &.active,
     &:hover,
     &:focus-visible {
         background: var(--dark-hover-color);

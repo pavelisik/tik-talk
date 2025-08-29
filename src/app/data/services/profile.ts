@@ -15,6 +15,9 @@ export class ProfileService {
     // создаем сигнал для данных по своему аккаунту
     me = signal<Profile | null>(null);
 
+    // создаем сигнал для отфильтрованных профилей в поиске
+    filteredProfiles = signal<Profile[]>([]);
+
     // метод сервиса по запросу данных тестового аккаунта
     getTestAccounts() {
         return this.http.get<Profile[]>(`${this.baseApiUrl}account/test_accounts`);
@@ -53,5 +56,15 @@ export class ProfileService {
         fd.append('image', file);
 
         return this.http.post<Profile>(`${this.baseApiUrl}account/upload_image`, fd);
+    }
+
+    // метод сервиса загружающий отфильтрованные профили по запросу
+    filterProfiles(params: Record<string, any>, limit = 5) {
+        return this.http
+            .get<Pageble<Profile>>(`${this.baseApiUrl}account/accounts`, { params })
+            .pipe(
+                map((res) => res.items.slice(0, limit)),
+                tap((profiles) => this.filteredProfiles.set(profiles)),
+            );
     }
 }

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SvgIcon } from '../svg-icon/svg-icon';
 import { SubscriberCard } from './subscriber-card/subscriber-card';
 import { ProfileService } from '../../data/services/profile';
@@ -9,7 +9,7 @@ import { ImgUrlPipe } from '../../helpers/pipes/img-url-pipe';
 
 @Component({
     selector: 'app-sidebar',
-    imports: [SvgIcon, CommonModule, RouterLink, SubscriberCard, ImgUrlPipe],
+    imports: [SvgIcon, CommonModule, RouterLink, SubscriberCard, ImgUrlPipe, RouterLinkActive],
     templateUrl: './sidebar.html',
     styleUrl: './sidebar.scss',
 })

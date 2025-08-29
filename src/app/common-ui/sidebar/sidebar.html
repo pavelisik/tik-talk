@@ -1,8 +1,9 @@
 <img src="/assets/svg/logo-small.svg" alt="" class="ml16 mb20" />
+
 <nav class="mb20">
     <ul class="main-menu-list">
         <li *ngFor="let menuItem of menuItems">
-            <a [routerLink]="[menuItem.link]" class="menu-item">
+            <a [routerLink]="[menuItem.link]" routerLinkActive="active" class="menu-item">
                 <svg [icon]="menuItem.icon"></svg>
                 <span>{{ menuItem.label }}</span>
             </a>
