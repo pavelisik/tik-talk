@@ -27,20 +27,31 @@ export class ProfileService {
             .pipe(tap((res) => this.me.set(res)));
     }
 
+    // метод сервиса по запросу данных о конкретном пользователе по id
     getAccount(id: string) {
         return this.http.get<Profile>(`${this.baseApiUrl}account/${id}`);
     }
 
+    // метод сервиса по запросу короткого списка подписчиков
     getSubscribersShortList(subsAmount = 3) {
-        return this.http
-            .get<Pageble<Profile>>(`${this.baseApiUrl}account/subscribers/`)
-            .pipe(map((res) => res.items.slice(0, subsAmount)));
+        return (
+            this.http
+                .get<Pageble<Profile>>(`${this.baseApiUrl}account/subscribers/`)
+                // обрезаем поток с данными подписчиков до необходимого числа
+                .pipe(map((res) => res.items.slice(0, subsAmount)))
+        );
     }
 
+    // метод сервиса обновляющий данный о текущем пользователе
     patchProfile(profile: Partial<Profile>) {
         return this.http.patch<Profile>(`${this.baseApiUrl}account/me`, profile);
     }
-}
-function Pageble<T>(arg0: string) {
-    throw new Error('Function not implemented.');
+
+    // метод сервиса загружающий аватарку пользователя на сервер
+    uploadAvatar(file: File) {
+        const fd = new FormData();
+        fd.append('image', file);
+
+        return this.http.post<Profile>(`${this.baseApiUrl}account/upload_image`, fd);
+    }
 }

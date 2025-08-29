@@ -15,6 +15,7 @@ export const routes: Routes = [
             { path: '', component: SearchPage },
             { path: 'profile/:id', component: ProfilePage },
             { path: 'settings', component: SettingsPage },
+            { path: 'search', component: SearchPage },
         ],
         // guard-функция для контроля доступа к маршрутам
         canActivate: [canActivateAuth],
